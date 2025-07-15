@@ -63,7 +63,7 @@ impl SendSmsRequest {
     /// # Examples
     ///
     /// ```rust
-    /// use tencentcloud_sdk_sms::SendSmsRequest;
+    /// use tencentcloud_sms_sdk::SendSmsRequest;
     ///
     /// let request = SendSmsRequest::new(
     ///     vec!["+8613800000000".to_string()],

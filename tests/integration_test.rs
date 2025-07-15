@@ -1,6 +1,6 @@
 //! Integration tests for the TencentCloud SMS SDK
 
-use tencentcloud_sdk_sms::{
+use tencentcloud_sms_sdk::{
     Client, Credential, SendSmsRequest, SendSmsResponse, TencentCloudError,
     ClientProfile, HttpProfile, SendStatus,
 };

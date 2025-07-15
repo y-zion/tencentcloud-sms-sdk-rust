@@ -26,7 +26,7 @@ impl Credential {
     /// # Examples
     ///
     /// ```rust
-    /// use tencentcloud_sdk_sms::Credential;
+    /// use tencentcloud_sms_sdk::Credential;
     ///
     /// let credential = Credential::new("your_secret_id", "your_secret_key", None);
     /// ```
@@ -51,8 +51,8 @@ impl Credential {
     ///
     /// # Examples
     ///
-    /// ```rust
-    /// use tencentcloud_sdk_sms::Credential;
+    /// ```rust,no_run
+    /// use tencentcloud_sms_sdk::Credential;
     ///
     /// // Make sure to set environment variables first
     /// // export TENCENTCLOUD_SECRET_ID=your_secret_id

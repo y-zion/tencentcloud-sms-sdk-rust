@@ -34,7 +34,7 @@ impl Client {
     /// # Examples
     ///
     /// ```rust
-    /// use tencentcloud_sdk_sms::{Client, Credential};
+    /// use tencentcloud_sms_sdk::{Client, Credential};
     ///
     /// let credential = Credential::new("your_secret_id", "your_secret_key", None);
     /// let client = Client::new(credential, "ap-guangzhou");
@@ -54,7 +54,7 @@ impl Client {
     /// # Examples
     ///
     /// ```rust
-    /// use tencentcloud_sdk_sms::{Client, Credential, ClientProfile, HttpProfile};
+    /// use tencentcloud_sms_sdk::{Client, Credential, ClientProfile, HttpProfile};
     ///
     /// let credential = Credential::new("your_secret_id", "your_secret_key", None);
     /// let mut http_profile = HttpProfile::new();
@@ -106,7 +106,7 @@ impl Client {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use tencentcloud_sdk_sms::{Client, Credential, SendSmsRequest};
+    /// use tencentcloud_sms_sdk::{Client, Credential, SendSmsRequest};
     ///
     /// #[tokio::main]
     /// async fn main() -> Result<(), Box<dyn std::error::Error>> {

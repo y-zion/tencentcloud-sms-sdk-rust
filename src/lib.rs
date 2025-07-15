@@ -14,7 +14,7 @@
 //! ## Basic Usage
 //!
 //! ```rust,no_run
-//! use tencentcloud_sdk_sms::{Client, Credential, SendSmsRequest};
+//! use tencentcloud_sms_sdk::{Client, Credential, SendSmsRequest};
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<(), Box<dyn std::error::Error>> {

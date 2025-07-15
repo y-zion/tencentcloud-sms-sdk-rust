@@ -17,7 +17,7 @@
 //! cargo run --example send_sms
 //! ```
 
-use tencentcloud_sdk_sms::{
+use tencentcloud_sms_sdk::{
     Client, ClientProfile, Credential, HttpProfile, SendSmsRequest, TencentCloudError,
 };
 

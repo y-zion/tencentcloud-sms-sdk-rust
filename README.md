@@ -1,8 +1,8 @@
 # TencentCloud SMS SDK for Rust
 
-[![Crates.io](https://img.shields.io/crates/v/tencentcloud-sdk-sms.svg)](https://crates.io/crates/tencentcloud-sdk-sms)
-[![Documentation](https://docs.rs/tencentcloud-sdk-sms/badge.svg)](https://docs.rs/tencentcloud-sdk-sms)
-[![License](https://img.shields.io/crates/l/tencentcloud-sdk-sms.svg)](LICENSE)
+[![Crates.io](https://img.shields.io/crates/v/tencentcloud-sms-sdk.svg)](https://crates.io/crates/tencentcloud-sms-sdk)
+[![Documentation](https://docs.rs/tencentcloud-sms-sdk/badge.svg)](https://docs.rs/tencentcloud-sms-sdk)
+[![License](https://img.shields.io/crates/l/tencentcloud-sms-sdk.svg)](LICENSE)
 
 A Rust implementation of the TencentCloud SMS SDK, providing a comprehensive interface for sending SMS messages through TencentCloud's SMS service.
 
@@ -23,7 +23,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-tencentcloud-sdk-sms = "0.1.0"
+tencentcloud-sms-sdk = "0.1.0"
 tokio = { version = "1.0", features = ["full"] }
 ```
 
@@ -32,7 +32,7 @@ tokio = { version = "1.0", features = ["full"] }
 ### Basic Usage
 
 ```rust
-use tencentcloud_sdk_sms::{Client, Credential, SendSmsRequest};
+use tencentcloud_sms_sdk::{Client, Credential, SendSmsRequest};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -65,7 +65,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Using Environment Variables
 
 ```rust
-use tencentcloud_sdk_sms::{Client, Credential, SendSmsRequest};
+use tencentcloud_sms_sdk::{Client, Credential, SendSmsRequest};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -87,7 +87,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Custom HTTP Profile
 
 ```rust
-use tencentcloud_sdk_sms::{Client, ClientProfile, Credential, HttpProfile};
+use tencentcloud_sms_sdk::{Client, ClientProfile, Credential, HttpProfile};
 
 let credential = Credential::from_env()?;
 
@@ -199,7 +199,7 @@ let response = client.send_sms(request).await?;
 The SDK provides comprehensive error handling with detailed error information:
 
 ```rust
-use tencentcloud_sdk_sms::error::error_codes;
+use tencentcloud_sms_sdk::error::error_codes;
 
 match client.send_sms(request).await {
     Ok(response) => {
@@ -318,8 +318,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- **Documentation**: [https://docs.rs/tencentcloud-sdk-sms](https://docs.rs/tencentcloud-sdk-sms)
-- **Issues**: [GitHub Issues](https://github.com/yourusername/tencentcloud-sdk-sms/issues)
+- **Documentation**: [https://docs.rs/tencentcloud-sms-sdk](https://docs.rs/tencentcloud-sms-sdk)
+- **Issues**: [GitHub Issues](https://github.com/yourusername/tencentcloud-sms-sdk/issues)
 - **TencentCloud SMS Documentation**: [https://cloud.tencent.com/document/product/382](https://cloud.tencent.com/document/product/382)
 
 ## Changelog
