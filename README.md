@@ -337,4 +337,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-This SDK is based on the [TencentCloud C++ SDK](https://github.com/TencentCloud/tencentcloud-sdk-cpp) implementation and follows the same API patterns and structure for consistency across different language SDKs.
+This SDK is based on the [TencentCloud C++ SDK](https://github.com/TencentCloud/tencentcloud-sdk-cpp) implementation by [Cursor](https://cursor.com) and follows the same API patterns and structure for consistency across different language SDKs.
