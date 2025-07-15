@@ -1,0 +1,37 @@
+[package]
+name = "tencentcloud-sms-sdk"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name <your.email@example.com>"]
+description = "TencentCloud SMS SDK for Rust"
+license = "MIT"
+repository = "https://github.com/y-zion/tencentcloud-sms-sdk-rust"
+homepage = "https://github.com/y-zion/tencentcloud-sms-sdk-rust"
+documentation = "https://docs.rs/tencentcloud-sms-sdk"
+readme = "README.md"
+keywords = ["tencent", "cloud", "sms", "sdk", "api"]
+categories = ["api-bindings", "network-programming"]
+
+[dependencies]
+tokio = { version = "1.0", features = ["full"], optional = true }
+reqwest = { version = "0.11", features = ["json"], optional = true }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+url = "2.0"
+hex = "0.4"
+hmac = "0.12"
+sha2 = "0.10"
+base64 = "0.21"
+thiserror = "1.0"
+anyhow = "1.0"
+uuid = { version = "1.0", features = ["v4"] }
+log = "0.4"
+
+[dev-dependencies]
+tokio-test = "0.4"
+env_logger = "0.10"
+
+[features]
+default = ["async"]
+async = ["tokio", "reqwest"]
