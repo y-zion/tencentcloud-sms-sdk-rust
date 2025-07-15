@@ -161,26 +161,28 @@ impl TencentCloudError {
 /// Common API error codes
 pub mod error_codes {
     /// Failed operation - signature incorrect or unapproved
-    pub const SIGNATURE_INCORRECT_OR_UNAPPROVED: &str = "FailedOperation.SignatureIncorrectOrUnapproved";
-    
+    pub const SIGNATURE_INCORRECT_OR_UNAPPROVED: &str =
+        "FailedOperation.SignatureIncorrectOrUnapproved";
+
     /// Failed operation - template incorrect or unapproved
-    pub const TEMPLATE_INCORRECT_OR_UNAPPROVED: &str = "FailedOperation.TemplateIncorrectOrUnapproved";
-    
+    pub const TEMPLATE_INCORRECT_OR_UNAPPROVED: &str =
+        "FailedOperation.TemplateIncorrectOrUnapproved";
+
     /// Unauthorized operation - SMS SDK app ID verify fail
     pub const SMS_SDK_APP_ID_VERIFY_FAIL: &str = "UnauthorizedOperation.SmsSdkAppIdVerifyFail";
-    
+
     /// Invalid parameter - incorrect phone number
     pub const INCORRECT_PHONE_NUMBER: &str = "InvalidParameterValue.IncorrectPhoneNumber";
-    
+
     /// Limit exceeded - phone number count limit
     pub const PHONE_NUMBER_COUNT_LIMIT: &str = "LimitExceeded.PhoneNumberCountLimit";
-    
+
     /// Failed operation - insufficient balance in SMS package
     pub const INSUFFICIENT_BALANCE: &str = "FailedOperation.InsufficientBalanceInSmsPackage";
-    
+
     /// Internal error - timeout
     pub const TIMEOUT: &str = "InternalError.Timeout";
-    
+
     /// Request time exception
     pub const REQUEST_TIME_EXCEPTION: &str = "InternalError.RequestTimeException";
 }

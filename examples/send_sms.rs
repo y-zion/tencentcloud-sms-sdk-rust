@@ -51,8 +51,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 /// Basic SMS sending example
 async fn basic_send_sms() -> Result<(), Box<dyn std::error::Error>> {
     // Create credentials from environment variables
-    let credential = Credential::from_env()
-        .map_err(|e| format!("Failed to load credentials: {}", e))?;
+    let credential =
+        Credential::from_env().map_err(|e| format!("Failed to load credentials: {}", e))?;
 
     // Create client
     let client = Client::new(credential, "ap-guangzhou");
@@ -61,9 +61,9 @@ async fn basic_send_sms() -> Result<(), Box<dyn std::error::Error>> {
     let request = SendSmsRequest::new(
         vec!["+8613800000000".to_string()], // Replace with actual phone numbers
         "1400000000",                       // Replace with your SMS SDK App ID
-        "123456",                          // Replace with your template ID
-        "YourSignature",                   // Replace with your signature
-        vec!["123456".to_string()],        // Template parameters
+        "123456",                           // Replace with your template ID
+        "YourSignature",                    // Replace with your signature
+        vec!["123456".to_string()],         // Template parameters
     );
 
     // Validate request
@@ -101,8 +101,8 @@ async fn basic_send_sms() -> Result<(), Box<dyn std::error::Error>> {
 /// SMS sending with custom configuration
 async fn send_sms_with_config() -> Result<(), Box<dyn std::error::Error>> {
     // Create credentials
-    let credential = Credential::from_env()
-        .map_err(|e| format!("Failed to load credentials: {}", e))?;
+    let credential =
+        Credential::from_env().map_err(|e| format!("Failed to load credentials: {}", e))?;
 
     // Create custom HTTP profile
     let mut http_profile = HttpProfile::new();
@@ -137,7 +137,7 @@ async fn send_sms_with_config() -> Result<(), Box<dyn std::error::Error>> {
         Ok(response) => {
             println!("SMS sent with custom config!");
             println!("Request ID: {}", response.request_id);
-            
+
             // Check individual phone numbers
             for phone in &["+8613800000000"] {
                 if response.check_phone_success(phone) {
@@ -158,8 +158,8 @@ async fn send_sms_with_config() -> Result<(), Box<dyn std::error::Error>> {
 /// International SMS sending example
 async fn send_international_sms() -> Result<(), Box<dyn std::error::Error>> {
     // Create credentials
-    let credential = Credential::from_env()
-        .map_err(|e| format!("Failed to load credentials: {}", e))?;
+    let credential =
+        Credential::from_env().map_err(|e| format!("Failed to load credentials: {}", e))?;
 
     // Create client
     let client = Client::new(credential, "ap-guangzhou");
@@ -167,9 +167,9 @@ async fn send_international_sms() -> Result<(), Box<dyn std::error::Error>> {
     // Create international SMS request (no signature required)
     let request = SendSmsRequest::new_international(
         vec!["+1234567890".to_string()], // International phone number
-        "1400000000",                   // SMS SDK App ID
-        "123456",                      // International template ID
-        vec!["123456".to_string()],    // Template parameters
+        "1400000000",                    // SMS SDK App ID
+        "123456",                        // International template ID
+        vec!["123456".to_string()],      // Template parameters
     );
 
     // Send SMS
@@ -177,7 +177,7 @@ async fn send_international_sms() -> Result<(), Box<dyn std::error::Error>> {
         Ok(response) => {
             println!("International SMS sent successfully!");
             println!("Request ID: {}", response.request_id);
-            
+
             // Print status for each number
             for status in &response.send_status_set {
                 println!(
@@ -224,7 +224,7 @@ async fn handle_errors() -> Result<(), Box<dyn std::error::Error>> {
                 println!("This is a network error");
             } else if let Some(code) = e.code() {
                 println!("API error code: {}", code);
-                
+
                 // Handle specific error codes
                 match code {
                     "UnauthorizedOperation.SmsSdkAppIdVerifyFail" => {

@@ -17,11 +17,7 @@ pub struct Signer {
 
 impl Signer {
     /// Create a new signer with credentials
-    pub fn new<S: Into<String>>(
-        secret_id: S,
-        secret_key: S,
-        token: Option<S>,
-    ) -> Self {
+    pub fn new<S: Into<String>>(secret_id: S, secret_key: S, token: Option<S>) -> Self {
         Self {
             secret_id: secret_id.into(),
             secret_key: secret_key.into(),
@@ -42,29 +38,15 @@ impl Signer {
         timestamp: DateTime<Utc>,
     ) -> Result<String> {
         // Step 1: Create canonical request
-        let canonical_request = self.create_canonical_request(
-            http_method,
-            uri,
-            query_string,
-            headers,
-            payload,
-        )?;
+        let canonical_request =
+            self.create_canonical_request(http_method, uri, query_string, headers, payload)?;
 
         // Step 2: Create string to sign
-        let string_to_sign = self.create_string_to_sign(
-            &canonical_request,
-            service,
-            region,
-            timestamp,
-        )?;
+        let string_to_sign =
+            self.create_string_to_sign(&canonical_request, service, region, timestamp)?;
 
         // Step 3: Calculate signature
-        let signature = self.calculate_signature(
-            &string_to_sign,
-            service,
-            region,
-            timestamp,
-        )?;
+        let signature = self.calculate_signature(&string_to_sign, service, region, timestamp)?;
 
         Ok(signature)
     }
@@ -111,14 +93,11 @@ impl Signer {
         }
 
         let mut params: Vec<(String, String)> = Vec::new();
-        
+
         for param in query_string.split('&') {
             let parts: Vec<&str> = param.split('=').collect();
             if parts.len() == 2 {
-                params.push((
-                    Self::url_encode(parts[0]),
-                    Self::url_encode(parts[1]),
-                ));
+                params.push((Self::url_encode(parts[0]), Self::url_encode(parts[1])));
             } else if parts.len() == 1 {
                 params.push((Self::url_encode(parts[0]), String::new()));
             }
@@ -129,7 +108,13 @@ impl Signer {
 
         let canonical_query = params
             .into_iter()
-            .map(|(k, v)| if v.is_empty() { k } else { format!("{}={}", k, v) })
+            .map(|(k, v)| {
+                if v.is_empty() {
+                    k
+                } else {
+                    format!("{}={}", k, v)
+                }
+            })
             .collect::<Vec<String>>()
             .join("&");
 
@@ -147,7 +132,7 @@ impl Signer {
         for (key, value) in headers {
             let lower_key = key.to_lowercase();
             let trimmed_value = value.trim();
-            
+
             canonical_headers.push(format!("{}:{}", lower_key, trimmed_value));
             header_names.push(lower_key);
         }
@@ -180,7 +165,7 @@ impl Signer {
         let algorithm = "TC3-HMAC-SHA256";
         let date = timestamp.format("%Y%m%d").to_string();
         let credential_scope = format!("{}/{}/tc3_request", date, service);
-        
+
         let mut hasher = Sha256::new();
         hasher.update(canonical_request.as_bytes());
         let hashed_canonical_request = hex::encode(hasher.finalize());
@@ -205,12 +190,11 @@ impl Signer {
         timestamp: DateTime<Utc>,
     ) -> Result<String> {
         let date = timestamp.format("%Y%m%d").to_string();
-        
+
         // Calculate signing key
-        let mut mac = HmacSha256::new_from_slice(
-            format!("TC3{}", self.secret_key).as_bytes()
-        ).map_err(|e| TencentCloudError::signature(format!("Failed to create HMAC: {}", e)))?;
-        
+        let mut mac = HmacSha256::new_from_slice(format!("TC3{}", self.secret_key).as_bytes())
+            .map_err(|e| TencentCloudError::signature(format!("Failed to create HMAC: {}", e)))?;
+
         mac.update(date.as_bytes());
         let k_date = mac.finalize().into_bytes();
 
@@ -254,10 +238,7 @@ impl Signer {
 
     /// Get signed headers from headers map
     pub fn get_signed_headers(headers: &HashMap<String, String>) -> String {
-        let mut header_names: Vec<String> = headers
-            .keys()
-            .map(|k| k.to_lowercase())
-            .collect();
+        let mut header_names: Vec<String> = headers.keys().map(|k| k.to_lowercase()).collect();
         header_names.sort();
         header_names.join(";")
     }
@@ -278,7 +259,7 @@ mod tests {
         let signer = Signer::new("test_id", "test_key", None);
         let payload = r#"{"test": "value"}"#;
         let hash = signer.hash_payload(payload);
-        
+
         // This should produce a consistent SHA256 hash
         assert_eq!(hash.len(), 64); // SHA256 produces 64 hex characters
     }
@@ -286,17 +267,21 @@ mod tests {
     #[test]
     fn test_canonical_query_string() {
         let signer = Signer::new("test_id", "test_key", None);
-        
+
         // Test empty query string
         let result = signer.create_canonical_query_string("").unwrap();
         assert_eq!(result, "");
-        
+
         // Test single parameter
-        let result = signer.create_canonical_query_string("param1=value1").unwrap();
+        let result = signer
+            .create_canonical_query_string("param1=value1")
+            .unwrap();
         assert_eq!(result, "param1=value1");
-        
+
         // Test multiple parameters (should be sorted)
-        let result = signer.create_canonical_query_string("param2=value2&param1=value1").unwrap();
+        let result = signer
+            .create_canonical_query_string("param2=value2&param1=value1")
+            .unwrap();
         assert_eq!(result, "param1=value1&param2=value2");
     }
 
@@ -306,9 +291,10 @@ mod tests {
         let mut headers = HashMap::new();
         headers.insert("Content-Type".to_string(), "application/json".to_string());
         headers.insert("Host".to_string(), "sms.tencentcloudapi.com".to_string());
-        
-        let (canonical_headers, signed_headers) = signer.create_canonical_headers(&headers).unwrap();
-        
+
+        let (canonical_headers, signed_headers) =
+            signer.create_canonical_headers(&headers).unwrap();
+
         // Headers should be sorted by key (lowercase)
         assert!(canonical_headers.contains("content-type:application/json"));
         assert!(canonical_headers.contains("host:sms.tencentcloudapi.com"));
@@ -326,16 +312,18 @@ mod tests {
     fn test_create_authorization_header() {
         let signer = Signer::new("test_id", "test_key", None);
         let timestamp = Utc.timestamp_opt(1609459200, 0).unwrap(); // 2021-01-01 00:00:00 UTC
-        
+
         let auth_header = signer.create_authorization_header(
             "test_signature",
             "sms",
             "ap-guangzhou",
             timestamp,
-            "content-type;host"
+            "content-type;host",
         );
-        
-        assert!(auth_header.starts_with("TC3-HMAC-SHA256 Credential=test_id/20210101/sms/tc3_request"));
+
+        assert!(
+            auth_header.starts_with("TC3-HMAC-SHA256 Credential=test_id/20210101/sms/tc3_request")
+        );
         assert!(auth_header.contains("SignedHeaders=content-type;host"));
         assert!(auth_header.contains("Signature=test_signature"));
     }

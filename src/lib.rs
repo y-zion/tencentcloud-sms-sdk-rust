@@ -42,13 +42,13 @@
 //! ```
 
 pub mod core;
-pub mod sms;
 pub mod error;
+pub mod sms;
 
 // Re-export main types for convenient usage
-pub use crate::core::{Client, Credential, HttpProfile, ClientProfile};
+pub use crate::core::{Client, ClientProfile, Credential, HttpProfile};
+pub use crate::error::{Result, TencentCloudError};
 pub use crate::sms::{SendSmsRequest, SendSmsResponse, SendStatus};
-pub use crate::error::{TencentCloudError, Result};
 
 /// Initialize the SDK (placeholder for future initialization needs)
 pub fn init_api() {

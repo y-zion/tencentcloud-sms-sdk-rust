@@ -1,8 +1,8 @@
 //! Integration tests for the TencentCloud SMS SDK
 
 use tencentcloud_sms_sdk::{
-    Client, Credential, SendSmsRequest, SendSmsResponse, TencentCloudError,
-    ClientProfile, HttpProfile, SendStatus,
+    Client, ClientProfile, Credential, HttpProfile, SendSmsRequest, SendSmsResponse, SendStatus,
+    TencentCloudError,
 };
 
 #[tokio::test]
@@ -121,7 +121,10 @@ async fn test_http_profile_configuration() {
     assert_eq!(http_profile.connect_timeout, 30);
     assert!(http_profile.keep_alive);
     assert_eq!(http_profile.endpoint, "custom.endpoint.com");
-    assert_eq!(http_profile.proxy_host, Some("proxy.example.com".to_string()));
+    assert_eq!(
+        http_profile.proxy_host,
+        Some("proxy.example.com".to_string())
+    );
     assert_eq!(http_profile.proxy_port, Some(8080));
 }
 
@@ -166,7 +169,10 @@ async fn test_send_status() {
     };
 
     assert!(!failed_status.is_success());
-    assert_eq!(failed_status.get_status_description(), "Invalid phone number format");
+    assert_eq!(
+        failed_status.get_status_description(),
+        "Invalid phone number format"
+    );
 }
 
 #[tokio::test]
@@ -256,20 +262,20 @@ async fn test_credential_validation() {
 async fn test_cpp_like_usage_pattern() {
     // Similar to C++ SDK example structure
     let credential = Credential::new("test_id", "test_key", None);
-    
+
     // Create HTTP profile
     let mut http_profile = HttpProfile::new();
     http_profile.set_keep_alive(true);
     http_profile.set_endpoint("sms.tencentcloudapi.com");
     http_profile.set_req_timeout(30);
     http_profile.set_connect_timeout(30);
-    
+
     // Create client profile
     let client_profile = ClientProfile::with_http_profile(http_profile);
-    
+
     // Create client
     let client = Client::with_profile(credential, "ap-guangzhou", client_profile);
-    
+
     // Create request
     let request = SendSmsRequest::new(
         vec!["+8613800000000".to_string()],
@@ -278,10 +284,10 @@ async fn test_cpp_like_usage_pattern() {
         "TestSignature",
         vec!["123456".to_string()],
     );
-    
+
     // Validate request
     assert!(request.validate().is_ok());
-    
+
     // This would be where we make the actual API call in a real scenario
     // let response = client.send_sms(request).await?;
 }
@@ -299,10 +305,10 @@ fn test_library_exports() {
         "TestSignature",
         vec!["123456".to_string()],
     );
-    
+
     // Test error types
     let _error = TencentCloudError::api("TestError", "Test message");
-    
+
     // If this compiles, it means all exports are working correctly
     assert!(true);
 }

@@ -30,11 +30,7 @@ impl Credential {
     ///
     /// let credential = Credential::new("your_secret_id", "your_secret_key", None);
     /// ```
-    pub fn new<S: Into<String>>(
-        secret_id: S,
-        secret_key: S,
-        token: Option<S>,
-    ) -> Self {
+    pub fn new<S: Into<String>>(secret_id: S, secret_key: S, token: Option<S>) -> Self {
         Self {
             secret_id: secret_id.into(),
             secret_key: secret_key.into(),
@@ -62,11 +58,19 @@ impl Credential {
     pub fn from_env() -> Result<Self> {
         let secret_id = env::var("TENCENTCLOUD_SECRET_ID")
             .or_else(|_| env::var("TC_SECRET_ID"))
-            .map_err(|_| TencentCloudError::auth("TENCENTCLOUD_SECRET_ID or TC_SECRET_ID environment variable not found"))?;
+            .map_err(|_| {
+                TencentCloudError::auth(
+                    "TENCENTCLOUD_SECRET_ID or TC_SECRET_ID environment variable not found",
+                )
+            })?;
 
         let secret_key = env::var("TENCENTCLOUD_SECRET_KEY")
             .or_else(|_| env::var("TC_SECRET_KEY"))
-            .map_err(|_| TencentCloudError::auth("TENCENTCLOUD_SECRET_KEY or TC_SECRET_KEY environment variable not found"))?;
+            .map_err(|_| {
+                TencentCloudError::auth(
+                    "TENCENTCLOUD_SECRET_KEY or TC_SECRET_KEY environment variable not found",
+                )
+            })?;
 
         let token = env::var("TENCENTCLOUD_TOKEN")
             .or_else(|_| env::var("TC_TOKEN"))
@@ -153,7 +157,7 @@ mod tests {
     #[test]
     fn test_credential_methods() {
         let mut credential = Credential::new("test_id", "test_key", None);
-        
+
         assert_eq!(credential.secret_id(), "test_id");
         assert_eq!(credential.secret_key(), "test_key");
         assert_eq!(credential.token(), None);

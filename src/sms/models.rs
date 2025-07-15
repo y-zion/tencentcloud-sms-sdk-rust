@@ -127,7 +127,11 @@ impl SendSmsRequest {
 
     /// Set template parameters
     pub fn set_template_param_set(&mut self, params: Vec<String>) -> &mut Self {
-        self.template_param_set = if params.is_empty() { None } else { Some(params) };
+        self.template_param_set = if params.is_empty() {
+            None
+        } else {
+            Some(params)
+        };
         self
     }
 
@@ -248,17 +252,25 @@ pub struct SendSmsResponse {
 impl SendSmsResponse {
     /// Check if all SMS messages were sent successfully
     pub fn is_all_success(&self) -> bool {
-        self.send_status_set.iter().all(|status| status.is_success())
+        self.send_status_set
+            .iter()
+            .all(|status| status.is_success())
     }
 
     /// Get the count of successfully sent messages
     pub fn success_count(&self) -> usize {
-        self.send_status_set.iter().filter(|status| status.is_success()).count()
+        self.send_status_set
+            .iter()
+            .filter(|status| status.is_success())
+            .count()
     }
 
     /// Get the count of failed messages
     pub fn failed_count(&self) -> usize {
-        self.send_status_set.iter().filter(|status| !status.is_success()).count()
+        self.send_status_set
+            .iter()
+            .filter(|status| !status.is_success())
+            .count()
     }
 
     /// Get failed phone numbers and their error messages
@@ -413,7 +425,10 @@ mod tests {
         };
 
         assert!(!failed_status.is_success());
-        assert_eq!(failed_status.get_status_description(), "Invalid phone number format");
+        assert_eq!(
+            failed_status.get_status_description(),
+            "Invalid phone number format"
+        );
     }
 
     #[test]

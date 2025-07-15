@@ -1,6 +1,6 @@
 //! Main client for TencentCloud API requests
 
-use crate::core::{Credential, ClientProfile, HttpProfile, Signer};
+use crate::core::{ClientProfile, Credential, HttpProfile, Signer};
 use crate::error::{Result, TencentCloudError};
 use crate::sms::{SendSmsRequest, SendSmsResponse};
 use chrono::Utc;
@@ -68,7 +68,7 @@ impl Client {
         profile: ClientProfile,
     ) -> Self {
         let http_profile = profile.get_http_profile();
-        
+
         let mut client_builder = reqwest::Client::builder()
             .timeout(http_profile.get_req_timeout())
             .connect_timeout(http_profile.get_connect_timeout())
@@ -86,7 +86,9 @@ impl Client {
             }
         }
 
-        let http_client = client_builder.build().unwrap_or_else(|_| reqwest::Client::new());
+        let http_client = client_builder
+            .build()
+            .unwrap_or_else(|_| reqwest::Client::new());
 
         Self {
             credential,
@@ -148,12 +150,24 @@ impl Client {
         // Build headers
         let mut headers = HashMap::new();
         headers.insert("Content-Type".to_string(), "application/json".to_string());
-        headers.insert("Host".to_string(), self.profile.get_http_profile().endpoint.clone());
+        headers.insert(
+            "Host".to_string(),
+            self.profile.get_http_profile().endpoint.clone(),
+        );
         headers.insert("X-TC-Action".to_string(), action.to_string());
-        headers.insert("X-TC-Version".to_string(), self.profile.get_api_version().to_string());
+        headers.insert(
+            "X-TC-Version".to_string(),
+            self.profile.get_api_version().to_string(),
+        );
         headers.insert("X-TC-Region".to_string(), self.region.clone());
-        headers.insert("X-TC-Timestamp".to_string(), timestamp.timestamp().to_string());
-        headers.insert("X-TC-Language".to_string(), self.profile.get_language().to_string());
+        headers.insert(
+            "X-TC-Timestamp".to_string(),
+            timestamp.timestamp().to_string(),
+        );
+        headers.insert(
+            "X-TC-Language".to_string(),
+            self.profile.get_language().to_string(),
+        );
 
         // Add session token if available
         if let Some(token) = self.credential.token() {
@@ -237,13 +251,16 @@ impl Client {
 
         // Check for API errors
         if let Some(error) = response_json.get("Response").and_then(|r| r.get("Error")) {
-            let code = error.get("Code")
+            let code = error
+                .get("Code")
                 .and_then(|c| c.as_str())
                 .unwrap_or("Unknown");
-            let message = error.get("Message")
+            let message = error
+                .get("Message")
                 .and_then(|m| m.as_str())
                 .unwrap_or("Unknown error");
-            let request_id = response_json.get("Response")
+            let request_id = response_json
+                .get("Response")
                 .and_then(|r| r.get("RequestId"))
                 .and_then(|r| r.as_str())
                 .map(|s| s.to_string());
@@ -256,7 +273,8 @@ impl Client {
         }
 
         // Extract the actual response data
-        let response_data = response_json.get("Response")
+        let response_data = response_json
+            .get("Response")
             .ok_or_else(|| TencentCloudError::other("Invalid response format"))?;
 
         // Deserialize response
@@ -305,7 +323,7 @@ mod tests {
     fn test_client_creation() {
         let credential = Credential::new("test_id", "test_key", None);
         let client = Client::new(credential, "ap-guangzhou");
-        
+
         assert_eq!(client.region(), "ap-guangzhou");
         assert_eq!(client.service(), "sms");
     }
@@ -317,7 +335,7 @@ mod tests {
         http_profile.set_req_timeout(30);
         let client_profile = ClientProfile::with_http_profile(http_profile);
         let client = Client::with_profile(credential, "ap-guangzhou", client_profile);
-        
+
         assert_eq!(client.region(), "ap-guangzhou");
         assert_eq!(client.profile().get_http_profile().req_timeout, 30);
     }
@@ -326,10 +344,10 @@ mod tests {
     fn test_client_setters() {
         let credential = Credential::new("test_id", "test_key", None);
         let mut client = Client::new(credential, "ap-guangzhou");
-        
+
         client.set_region("ap-beijing");
         assert_eq!(client.region(), "ap-beijing");
-        
+
         let new_credential = Credential::new("new_id", "new_key", None);
         client.set_credential(new_credential);
         assert_eq!(client.credential.secret_id(), "new_id");
@@ -339,7 +357,7 @@ mod tests {
     async fn test_send_sms_invalid_credentials() {
         let credential = Credential::new("", "", None);
         let client = Client::new(credential, "ap-guangzhou");
-        
+
         let request = SendSmsRequest::new(
             vec!["+8613800000000".to_string()],
             "1400000000",
@@ -347,7 +365,7 @@ mod tests {
             "Test",
             vec!["123456".to_string()],
         );
-        
+
         let result = client.send_sms(request).await;
         assert!(result.is_err());
     }

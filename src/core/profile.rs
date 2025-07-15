@@ -266,7 +266,10 @@ mod tests {
     #[test]
     fn test_http_profile_full_endpoint() {
         let mut profile = HttpProfile::new();
-        assert_eq!(profile.get_full_endpoint(), "https://sms.tencentcloudapi.com");
+        assert_eq!(
+            profile.get_full_endpoint(),
+            "https://sms.tencentcloudapi.com"
+        );
 
         profile.set_endpoint("http://custom.endpoint.com");
         assert_eq!(profile.get_full_endpoint(), "http://custom.endpoint.com");
@@ -286,7 +289,10 @@ mod tests {
 
         profile.set_proxy_port(Some(8080));
         assert!(profile.has_proxy());
-        assert_eq!(profile.get_proxy_url(), Some("http://proxy.example.com:8080".to_string()));
+        assert_eq!(
+            profile.get_proxy_url(),
+            Some("http://proxy.example.com:8080".to_string())
+        );
     }
 
     #[test]
