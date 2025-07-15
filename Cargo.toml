@@ -1,14 +1,15 @@
 [package]
 name = "tencentcloud-sms-sdk"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Your Name <your.email@example.com>"]
 description = "TencentCloud SMS SDK for Rust"
-license = "MIT"
+license = "Apache-2.0"
 repository = "https://github.com/y-zion/tencentcloud-sms-sdk-rust"
 homepage = "https://github.com/y-zion/tencentcloud-sms-sdk-rust"
 documentation = "https://docs.rs/tencentcloud-sms-sdk"
 readme = "README.md"
+license-file = "LICENSE"
 keywords = ["tencent", "cloud", "sms", "sdk", "api"]
 categories = ["api-bindings", "network-programming"]
 
