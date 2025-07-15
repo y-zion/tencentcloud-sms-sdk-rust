@@ -84,4 +84,3 @@ jobs:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
         run: |
           cargo owner --add github:y-zion:core
-          cargo owner --add github:Weidaicheng
