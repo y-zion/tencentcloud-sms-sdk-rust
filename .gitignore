@@ -1,0 +1,106 @@
+# Rust build artifacts
+/target/
+Cargo.lock
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Rust-specific
+**/*.rs.bk
+*.pdb
+
+# Environment and configuration files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+config.toml
+config.json
+
+# TencentCloud credentials and sensitive data
+credentials.json
+secret_id.txt
+secret_key.txt
+*.pem
+*.key
+*.crt
+
+# Log files
+*.log
+logs/
+log/
+
+# Documentation build artifacts
+/book/
+/mdbook/
+
+# Test artifacts
+coverage/
+*.profraw
+*.gcda
+*.gcno
+
+# Backup files
+*.bak
+*.backup
+*.tmp
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Visual Studio Code
+.vscode/
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Dependencies
+node_modules/
+
+# Performance and profiling
+flamegraph.svg
+perf.data*
+callgrind.out.*
+
+# Misc
+*.pid
+*.seed
+*.pid.lock
