@@ -1,0 +1,1 @@
+/workspace/target/debug/examples/send_sms: /workspace/examples/send_sms.rs /workspace/src/core/client.rs /workspace/src/core/credential.rs /workspace/src/core/mod.rs /workspace/src/core/profile.rs /workspace/src/core/signature.rs /workspace/src/error.rs /workspace/src/lib.rs /workspace/src/sms/mod.rs /workspace/src/sms/models.rs
