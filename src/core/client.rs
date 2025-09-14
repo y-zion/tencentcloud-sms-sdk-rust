@@ -1,6 +1,6 @@
 //! Main client for TencentCloud API requests
 
-use crate::core::{ClientProfile, Credential, HttpProfile, Signer};
+use crate::core::{ClientProfile, Credential};
 use crate::error::{Result, TencentCloudError};
 use crate::sms::{SendSmsRequest, SendSmsResponse};
 use chrono::Utc;
@@ -8,6 +8,7 @@ use reqwest;
 use serde_json;
 use std::collections::HashMap;
 use std::time::Duration;
+use tencentcloud_sign_sdk::{Tc3Signer, sha256_hex};
 
 /// Main client for TencentCloud SMS API
 pub struct Client {
@@ -21,6 +22,8 @@ pub struct Client {
     http_client: reqwest::Client,
     /// Service name (always "sms" for SMS service)
     service: String,
+    /// TC3 signer for request signing
+    signer: Tc3Signer,
 }
 
 impl Client {
@@ -90,12 +93,20 @@ impl Client {
             .build()
             .unwrap_or_else(|_| reqwest::Client::new());
 
+        let signer = Tc3Signer::new(
+            credential.secret_id().to_string(),
+            credential.secret_key().to_string(),
+            "sms".to_string(),
+            profile.is_debug(),
+        );
+
         Self {
             credential,
             region: region.into(),
             profile,
             http_client,
             service: "sms".to_string(),
+            signer,
         }
     }
 
@@ -174,37 +185,28 @@ impl Client {
             headers.insert("X-TC-Token".to_string(), token.to_string());
         }
 
-        // Create signer
-        let signer = Signer::new(
-            self.credential.secret_id(),
-            self.credential.secret_key(),
-            self.credential.token(),
+        // Prepare headers for signing
+        let host = self.profile.get_http_profile().endpoint.clone();
+        let canonical_headers = format!(
+            "content-type:application/json\nhost:{}\n",
+            host
         );
+        let signed_headers = "content-type;host";
+        let hashed_payload = sha256_hex(&payload);
 
-        // Sign the request
-        let signature = signer.sign_request(
+        // Sign the request using TC3 signer
+        let result = self.signer.sign(
             &self.profile.get_http_profile().req_method,
             "/",
             "",
-            &headers,
-            &payload,
-            &self.service,
-            &self.region,
-            timestamp,
-        )?;
-
-        // Get signed headers
-        let signed_headers = Signer::get_signed_headers(&headers);
-
-        // Create authorization header
-        let authorization = signer.create_authorization_header(
-            &signature,
-            &self.service,
-            &self.region,
-            timestamp,
-            &signed_headers,
+            &canonical_headers,
+            signed_headers,
+            &hashed_payload,
+            timestamp.timestamp(),
         );
 
+        // Create authorization header
+        let authorization = self.signer.create_authorization_header(&result, signed_headers);
         headers.insert("Authorization".to_string(), authorization);
 
         // Build HTTP request
@@ -305,18 +307,32 @@ impl Client {
 
     /// Update the client profile
     pub fn set_profile(&mut self, profile: ClientProfile) {
-        self.profile = profile;
+        self.profile = profile.clone();
+        // Update signer with new debug setting
+        self.signer = Tc3Signer::new(
+            self.credential.secret_id().to_string(),
+            self.credential.secret_key().to_string(),
+            "sms".to_string(),
+            profile.is_debug(),
+        );
     }
 
     /// Update credentials
     pub fn set_credential(&mut self, credential: Credential) {
-        self.credential = credential;
+        self.credential = credential.clone();
+        self.signer = Tc3Signer::new(
+            credential.secret_id().to_string(),
+            credential.secret_key().to_string(),
+            "sms".to_string(),
+            self.profile.is_debug(),
+        );
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::core::HttpProfile;
     use crate::sms::SendSmsRequest;
 
     #[test]
