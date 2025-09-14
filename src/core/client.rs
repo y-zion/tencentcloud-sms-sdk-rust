@@ -8,7 +8,7 @@ use reqwest;
 use serde_json;
 use std::collections::HashMap;
 use std::time::Duration;
-use tencentcloud_sign_sdk::{Tc3Signer, sha256_hex};
+use tencentcloud_sign_sdk::{sha256_hex, Tc3Signer};
 
 /// Main client for TencentCloud SMS API
 pub struct Client {
@@ -187,10 +187,7 @@ impl Client {
 
         // Prepare headers for signing
         let host = self.profile.get_http_profile().endpoint.clone();
-        let canonical_headers = format!(
-            "content-type:application/json\nhost:{}\n",
-            host
-        );
+        let canonical_headers = format!("content-type:application/json\nhost:{}\n", host);
         let signed_headers = "content-type;host";
         let hashed_payload = sha256_hex(&payload);
 
@@ -206,7 +203,9 @@ impl Client {
         );
 
         // Create authorization header
-        let authorization = self.signer.create_authorization_header(&result, signed_headers);
+        let authorization = self
+            .signer
+            .create_authorization_header(&result, signed_headers);
         headers.insert("Authorization".to_string(), authorization);
 
         // Build HTTP request
