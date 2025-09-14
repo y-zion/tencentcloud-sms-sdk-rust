@@ -23,7 +23,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-tencentcloud-sms-sdk = "0.1.0"
+tencentcloud-sms-sdk = "0.1.2"
 tokio = { version = "1.0", features = ["full"] }
 ```
 
@@ -321,19 +321,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Documentation**: [https://docs.rs/tencentcloud-sms-sdk](https://docs.rs/tencentcloud-sms-sdk)
 - **Issues**: [GitHub Issues](https://github.com/yourusername/tencentcloud-sms-sdk/issues)
 - **TencentCloud SMS Documentation**: [https://cloud.tencent.com/document/product/382](https://cloud.tencent.com/document/product/382)
-
-## Changelog
-
-### Version 0.1.0
-
-- Initial release
-- Support for SendSms API
-- TC3-HMAC-SHA256 signature algorithm
-- Comprehensive error handling
-- Support for domestic and international SMS
-- Async/await support with tokio
-- Configurable HTTP profiles and timeouts
-- Environment variable support for credentials
 
 ## Acknowledgments
 
